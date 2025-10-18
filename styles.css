@@ -86,6 +86,7 @@
 
 .navbar li {
   margin-left: 15px;
+  font-family: var(--primary-font);
 }
 
 .navbar li a {
