@@ -12,6 +12,11 @@ class Provider:
     all_ages = False
     schedule = _default
     
+    price = _default
+    price_method = _default
+        #if price is _default: ignore method
+        #make it so method can only be "per visit" or "monthly"
+    
         
     def add_age(self, lower_bound, upper_bound):
         ages_covered[0] = lower_bound
