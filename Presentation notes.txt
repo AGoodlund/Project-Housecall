@@ -1,0 +1,12 @@
+Presentation notes:
+
+Give the judges the Moon goal: If this were a full project what would we be pushing for ("shoot for the moon. Even if you miss you'll end up a star")
+	Agent able to create appointment for clients by integrating the app with clinics
+		Clinics can lose business if a person is kept on the line too long
+	Clinics adding themselves to the database to show up in searches with more accurate information
+	Saving scraped clinic information on a database to pull from later without scraping
+		Check packet information to know if an update is necessary
+	Language support
+
+Features we started but ran out of time to create
+Walkthrough of the functional parts of the application 

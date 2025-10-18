@@ -11,6 +11,8 @@
   html, body {
     margin: 0;
     padding: 0;
+    background: linear-gradient(0deg, white, var(--background-color) 80%) no-repeat;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
   }
 
   p {
@@ -289,8 +291,14 @@
   margin: 0;
 }
 
+.prov_cont {
+  width: 100%;
+  color: linear-gradient(0deg, var(--background-color) 90%) ,red  no-repeat;
+}
+
 #provider_section {
   justify-content: center;
+  justify-self: center;
   margin-top: 20px;
   margin-bottom: 60px;
   width: 80%;

@@ -7,10 +7,324 @@
   <meta http-equiv="Content-Language" content="en">
   <link rel="stylesheet" href="styles.css">
   <script type="module" src="script.js" defer></script>
+
+  <style>
+    body {
+      background: paleturquoise;
+    }
+
+    .main {
+      max-width: 900px;
+      margin: 40px auto;
+      background: white;
+      border-radius: 8px;
+      padding: 40px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: black;
+      margin-bottom: 40px;
+      font-size: 2.2rem;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+    }
+
+    .introduction {
+      background: #f8f9fa;
+      padding: 25px;
+      border-radius: 8px;
+      border-left: 4px solid #000;
+      margin-bottom: 40px;
+    }
+
+    .introduction p {
+      margin: 0;
+      font-size: 1.1rem;
+      color: #333;
+    }
+
+    .faq {
+      margin-bottom: 25px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 25px;
+      background: white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      transition: box-shadow 0.2s ease;
+    }
+
+    .faq:hover {
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .faq h3 {
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+      font-weight: 600;
+      color: black;
+      line-height: 1.4;
+    }
+
+    .faq p {
+      margin: 0;
+      line-height: 1.7;
+      font-size: 1rem;
+      color: #333;
+    }
+
+    .faq a {
+      color: black;
+      text-decoration: underline;
+      font-weight: 500;
+    }
+
+    .faq a:hover {
+      text-decoration: none;
+    }
+
+    .feedback {
+      text-align: center;
+      margin-top: 50px;
+      padding: 30px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
+    }
+
+    .feedback p {
+      font-size: 1.1rem;
+      margin: 0 0 20px 0;
+      color: #333;
+    }
+
+    .feedback-btn {
+      display: inline-block;
+      background: black;
+      color: white;
+      padding: 12px 25px;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      border: 2px solid black;
+    }
+
+    .feedback-btn:hover {
+      background: white;
+      color: black;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    /* Chatbox button */
+    #chatButton {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: black;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    #chatButton:hover {
+      background: #333;
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+
+    /* Chatbox window */
+    #chatBox {
+      display: none;
+      position: fixed;
+      bottom: 100px;
+      right: 30px;
+      border: 1px solid #e0e0e0;
+      background: white;
+      width: 380px;
+      height: 500px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      border-radius: 12px;
+      padding: 0;
+      z-index: 1001;
+      flex-direction: column;
+    }
+
+    #chatBox.active {
+      display: flex;
+    }
+
+    .chat-header {
+      background: black;
+      color: white;
+      padding: 20px;
+      border-radius: 12px 12px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chat-header h4 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    .close-chat {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 1.2rem;
+      padding: 5px;
+      border-radius: 50%;
+      transition: background-color 0.2s ease;
+    }
+
+    .close-chat:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background: white;
+    }
+
+    .message {
+      margin-bottom: 15px;
+      padding: 12px 16px;
+      border-radius: 18px;
+      max-width: 80%;
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    .bot-message {
+      background: #f1f3f4;
+      color: #333;
+      margin-right: auto;
+      border: 1px solid #e8eaed;
+    }
+
+    .user-message {
+      background: black;
+      color: white;
+      margin-left: auto;
+    }
+
+    .chat-input {
+      padding: 20px;
+      background: white;
+      border-top: 1px solid #e0e0e0;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 1px solid #e0e0e0;
+      border-radius: 24px;
+      outline: none;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    .chat-input input:focus {
+      border-color: black;
+      box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+    }
+
+    .chat-input button {
+      background: black;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .chat-input button:hover {
+      background: #333;
+      transform: scale(1.05);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .main {
+        margin: 20px 15px;
+        padding: 30px 20px;
+      }
+      
+      h1 {
+        font-size: 1.8rem;
+        margin-bottom: 30px;
+      }
+      
+      .faq {
+        padding: 20px;
+      }
+      
+      .faq h3 {
+        font-size: 1.2rem;
+      }
+      
+      #chatBox {
+        width: 320px;
+        height: 450px;
+        right: 15px;
+        bottom: 80px;
+      }
+      
+      #chatButton {
+        bottom: 20px;
+        right: 20px;
+        width: 55px;
+        height: 55px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .main {
+        margin: 15px 10px;
+        padding: 20px 15px;
+      }
+      
+      .faq {
+        padding: 15px;
+      }
+      
+      .faq h3 {
+        font-size: 1.1rem;
+      }
+      
+      #chatBox {
+        width: calc(100vw - 30px);
+        right: 15px;
+      }
+    }
+  </style>
 </head>
 
-<body style="background: paleturquoise">
-  <header>
+<body>
+    <header>
     <nav class="navbar">
       <div class="navbar_cont">
         <div class="nav_left">
@@ -23,15 +337,176 @@
         </div>
         <ul class="hovercolor">
           <li class="nav_item"> <a href="index.html" class="nav_link">Home</a> </li>
-          <li class="nav_item"> <a href="blank.html" class="nav_link">Contact Us</a></li>
-          <li class="nav_item"> <a href="faq.html" class="nav_link">FAQ</a></li>
-  </ul>
+          <li class="nav_item"> <a href="feedback.html" class="nav_link">Feedback</a></li>
+          <li class="nav_item"> <a href="blank.html" class="nav_link">FAQ</a></li>
+        </ul>
       </div>
     </nav>
   </header>
 
   <main class="main">
- 
+    <h1>Frequently Asked Questions</h1>
+
+    <div class="introduction">
+      <p>Here are some common questions about our website. If you still need help, click the chat icon in the bottom-right corner.</p>
+    </div>
+
+    <div class="faq">
+      <h3>What is HouseCall?</h3>
+      <p>HouseCall helps users find healthcare providers and view their contact details, locations, and appointment information automatically using AI.</p>
+    </div>
+
+    <div class="faq">
+      <h3>How does the AI find healthcare provider information?</h3>
+      <p>Our AI scans provider websites and extracts key data like phone numbers, locations, and appointment dates automatically from official health provider websites.</p>
+    </div>
+
+    <div class="faq">
+      <h3>Do I need to create an account to use this website?</h3>
+      <p>No, you can search for providers without creating an account. The service is completely free to use.</p>
+    </div>
+
+    <div class="faq">
+      <h3>Do you collect my personal information?</h3>
+      <p>No, we don't collect or store personal user data. We only process publicly available provider information to help you find healthcare services.</p>
+    </div>
+
+    <div class="faq">
+      <h3>How accurate is the information?</h3>
+      <p>The data comes directly from provider websites, and our AI checks for the most recent updates to keep results accurate.</p>
+    </div>
+
+    <div class="faq">
+      <h3>Can I contact providers directly?</h3>
+      <p>Yes, each provider's page includes their official contact information and links for appointments. You can use the phone numbers or links shown in the results to reach them directly.</p>
+    </div>
+
+    <div class="faq">
+      <h3>What if I find incorrect information?</h3>
+      <p>You can use our feedback form to report incorrect details. <a href="https://forms.gle/BwzGFkg8SDspkUbo7" target="_blank">Click here to access the feedback form</a>.</p>
+    </div>
+
+    <div class="faq">
+      <h3>Who created this website?</h3>
+      <p>It was developed by a student team for an AI and innovation hackathon to make healthcare information easier to access.</p>
+    </div>
+
+    <div class="faq">
+      <h3>I still need help. What should I do?</h3>
+      <p>If you still have questions, click the chat icon in the bottom-right corner to open our chatbox and get support.</p>
+    </div>
+
+    <div class="feedback">
+      <p>We appreciate your feedback. Please click below to share your thoughts.</p>
+      <a href="https://forms.gle/BwzGFkg8SDspkUbo7" target="_blank" class="feedback-btn">Give Feedback</a>
+    </div>
   </main>
+
+  <!-- Chat Button -->
+  <button id="chatButton">💬</button>
+
+  <!-- Chatbox -->
+  <div id="chatBox">
+    <div class="chat-header">
+      <h4>Chat Support</h4>
+      <button class="close-chat">×</button>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="message bot-message">
+        <p>Hello! How can I help you today?</p>
+      </div>
+    </div>
+    <div class="chat-input">
+      <input type="text" id="chatInput" placeholder="Type your message...">
+      <button id="sendMessage">→</button>
+    </div>
+  </div>
+
+  <script>
+    // Chatbox functionality
+    const chatButton = document.getElementById('chatButton');
+    const chatBox = document.getElementById('chatBox');
+    const closeChat = document.querySelector('.close-chat');
+    const chatInput = document.getElementById('chatInput');
+    const sendButton = document.getElementById('sendMessage');
+    const chatMessages = document.getElementById('chatMessages');
+
+    // Toggle chatbox visibility
+    chatButton.addEventListener('click', () => {
+      chatBox.classList.toggle('active');
+      if (chatBox.classList.contains('active')) {
+        chatInput.focus();
+      }
+    });
+
+    // Close chatbox
+    closeChat.addEventListener('click', () => {
+      chatBox.classList.remove('active');
+    });
+
+    // Send message functionality
+    function sendMessage() {
+      const message = chatInput.value.trim();
+      if (message) {
+        // Add user message
+        addMessage(message, 'user');
+        chatInput.value = '';
+        
+        // Simulate bot response
+        setTimeout(() => {
+          const botResponse = getBotResponse(message);
+          addMessage(botResponse, 'bot');
+        }, 1000);
+      }
+    }
+
+    // Send button click
+    sendButton.addEventListener('click', sendMessage);
+
+    // Enter key press
+    chatInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    });
+
+    // Add message to chat
+    function addMessage(text, sender) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${sender}-message`;
+      messageDiv.innerHTML = `<p>${text}</p>`;
+      chatMessages.appendChild(messageDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Simple bot responses
+    function getBotResponse(userMessage) {
+      const message = userMessage.toLowerCase();
+      
+      if (message.includes('hello') || message.includes('hi') || message.includes('hey')) {
+        return "Hello! How can I help you today?";
+      } else if (message.includes('help')) {
+        return "I'm here to help! You can ask me about how to use the website, find providers, or any other questions you might have.";
+      } else if (message.includes('provider') || message.includes('doctor') || message.includes('healthcare')) {
+        return "Our website helps you find healthcare providers using AI. Simply search for the type of provider you need, and we'll show you contact details and availability.";
+      } else if (message.includes('account') || message.includes('sign up') || message.includes('register')) {
+        return "You don't need to create an account to use our website! You can search for providers immediately without any registration.";
+      } else if (message.includes('privacy') || message.includes('data') || message.includes('information')) {
+        return "We don't collect or store any personal information. We only process publicly available provider information to help you find healthcare services.";
+      } else if (message.includes('accurate') || message.includes('correct') || message.includes('wrong')) {
+        return "Our AI pulls information directly from provider websites and checks for updates regularly. If you find incorrect information, please use our feedback form to report it.";
+      } else if (message.includes('contact') || message.includes('phone') || message.includes('call')) {
+        return "Yes! You can contact providers directly using the phone numbers and links provided in our search results.";
+      } else if (message.includes('feedback') || message.includes('report') || message.includes('error')) {
+        return "You can report any issues or provide feedback using our feedback form. Click the 'Give Feedback' button on this page to access it.";
+      } else if (message.includes('who') || message.includes('created') || message.includes('team')) {
+        return "This website was developed by a student team for an AI and innovation hackathon to make healthcare information more accessible.";
+      } else if (message.includes('thank') || message.includes('thanks')) {
+        return "You're welcome! Is there anything else I can help you with?";
+      } else {
+        return "I understand you have a question. Could you please be more specific? I can help you with information about our website, how to find providers, privacy concerns, or any other questions you might have.";
+      }
+    }
+  </script>
 </body>
 </html>
