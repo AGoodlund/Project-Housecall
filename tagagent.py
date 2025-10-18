@@ -1,11 +1,15 @@
 
 from openai import OpenAI
+import os
+from dotenv import load_dotenv
 
-client = OpenAI(api_key="YOUR_OPENAI_API_KEY")
+load_dotenv()
+api_key = os.getenv("OPENAI_API_KEY")
+client = OpenAI(api_key=api_key)
 
 def get_tags_from_text(text_input):
     response = client.chat.completions.create(
-        model="gpt-4o", # Or another suitable model
+        model="gpt-4o-mini", # Or another suitable model
         messages=[
             {"role": "system", "content": "You are a helpful assistant that extracts keywords and tags."},
             {"role": "user", "content": f"Extract relevant tags from the following text, separated by commas: {text_input}"}
