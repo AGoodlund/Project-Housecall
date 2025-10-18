@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HouseCall</title>
+  <meta http-equiv="Content-Language" content="en">
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="script.js" defer></script>
+</head>
+
+<body style="background: paleturquoise">
+  <header>
+    <nav class="navbar">
+      <div class="navbar_cont">
+        <div class="nav_left">
+          <a href="index.html" id="Logo">
+            <img src="logo.png" alt="HouseCall Logo">
+          </a>
+          <div id="header_title">
+            <span>HouseCall</span>
+          </div>
+        </div>
+        <ul class="hovercolor">
+          <li class="nav_item"> <a href="index.html" class="nav_link">Home</a> </li>
+          <li class="nav_item"> <a href="blank.html" class="nav_link">Contact Us</a></li>
+          <li class="nav_item"> <a href="blank.html" class="nav_link">FAQ</a></li>
+  </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main class="main">
+    <section id="main_intro_container">
+      <div id="main_intro_text">
+        <h1>House Call</h1>
+        <p><i>
+          Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+          Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet
+          quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.
+        </i></p>
+      </div>
+      <div id="main_intro_image">
+        <img src="med.webp" alt="House Call Image" width="90%" height="auto">
+      </div>
+    </section>
+
+    <section id="main_content_container" class="intake">
+      <div id="collapsed_bar" class="collapsed_bar hidden">
+        <span id="collapsed_label"></span>
+        <span class="arrow">></span>
+      </div>
+      <div id="form_area">
+        <p class="body_intro">Write down your Zip Code and Symptoms below</p>
+        <div class="body_input">
+          <input type="text" placeholder="Zip Code" id="zip_code">
+          <textarea placeholder="Enter symptoms here" id="text_input"></textarea>    
+          <div class="body_buttons">
+            <label class="body_button_one">
+              <p class="body_one">Direct Care Providers</p>
+              <input type="checkbox" id="check_one">
+            </label>
+            <label class="body_button_two">
+              <p class="body_two">Community Providers</p>
+              <input type="checkbox" id="check_two">
+            </label>
+          </div>
+          <button class="body_submit" id="submit_btn">Submit</button>
+          <p id="validation_message" class="hidden">Fill out all all information before submitting</p>
+        </div>
+      </div>
+    </section>
+    <section id="provider_section" class="hidden">
+      <div class="provider_cont">
+        <ul id="provider_list" class="provider_list"></ul>
+        <div id="provider_info" class="provider_info">
+          <p class="hint">Select provider</p>
+        </div>
+      </div>
+    </section>    
+  </main>
+</body>
+</html>
