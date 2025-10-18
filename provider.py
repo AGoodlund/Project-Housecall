@@ -1,5 +1,6 @@
 class Provider:
     _default = "unknown"
+    
     name = _default
     address = _default
     specialty = _default
@@ -14,13 +15,16 @@ class Provider:
     
     price = _default
     price_method = _default
-        #if price is _default: ignore method
+        #if price == _default: ignore method
         #make it so method can only be "per visit" or "monthly"
     
         
     def add_age(self, lower_bound, upper_bound):
         ages_covered[0] = lower_bound
         ages_covered[1] = upper_bound
+    
+    #TODO: code verify phone_number is in proper form
+    #TODO: hide price_method completely if price == _default
         
     def __str__(self):
         return f"name:\t\t{self.name}\naddress:\t{self.address}\nspecialty:\t{self.specialty}\ncall num:\t{self.phone_number}\nemail:\t\t{self.email}\nwebsite:\t{self.website}\naccepting new:\t{self.accepting_new_clients}\ntreats ages:\t{self.ages_covered[0]}-{self.ages_covered[1]}\nall ages:\t{self.all_ages}\n\nschedule:\n\t{self.schedule}"
