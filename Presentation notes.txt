@@ -6,6 +6,7 @@ Give the judges the Moon goal: If this were a full project what would we be push
 	Clinics adding themselves to the database to show up in searches with more accurate information
 	Saving scraped clinic information on a database to pull from later without scraping
 		Check packet information to know if an update is necessary
+	Language support
 
 Features we started but ran out of time to create
 Walkthrough of the functional parts of the application 
