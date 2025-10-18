@@ -16,6 +16,8 @@ class Provider:
     schedule = _default
     price = _default
     price_method = _default
+    tags = _default
+    
         
     def add_age(self, lower_bound, upper_bound):
         self.ages_covered[0] = lower_bound
