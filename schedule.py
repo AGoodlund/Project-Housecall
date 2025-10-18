@@ -5,13 +5,13 @@ class Schedule:
         self.lunch_break = False
         
         self.week = {
-            "Monday": [self.time[0], self.time[1]],
-            "Tuesday": [self.time[0], self.time[1]],
-            "Wednesday": [self.time[0], self.time[1]],
-            "Thursday": [self.time[0], self.time[1]],
-            "Friday": [self.time[0], self.time[1]],
-            "Saturday": [self.time[0], self.time[1]],
-            "Sunday": [self.time[0], self.time[1]]
+            "Monday": self.time,
+            "Tuesday": self.time,
+            "Wednesday": self.time,
+            "Thursday": self.time,
+            "Friday": self.time,
+            "Saturday": self.time,
+            "Sunday": self.time
             }
     
     def add_time(self, day, start, end):
@@ -41,7 +41,8 @@ class Schedule:
                 self.week[lunch_day][2][1]=end
         
     def translate_to_am_pm(self, num=13):
-        if num > 12:
+        num = int(num)
+        if int(num) > 12:
             return str(num-12)+'pm'
         return str(num)+'am'
     
@@ -58,11 +59,22 @@ class Schedule:
             return (int(num[:spot])+12)%24
         
         return False
+    
+    def close_day(self, day):
+        self.week[day] = "Closed"
+        
+    def detect_closed(self):
+        for day in self.week:
+            o = self.week[day][0]
+            c = self.week[day][1]
+            if o == c:
+                self.close_day(day)
             
     def __str__(self):
         output = ""
         for day in self.week:
-            output = output + day + ':\n\t' + self.translate_to_am_pm(self.week[day][0]) + '-' + self.translate_to_am_pm(self.week[day][1]) + ("\n\tClosed from: " + self.translate_to_am_pm(self.week[day][2][0]) + '-' + (self.translate_to_am_pm(self.week[day][2][1])) if self.lunch_break == True else '')
+            #print(type(self.week[day]))
+            output = output + day + ':\n\t' + (self.translate_to_am_pm(self.week[day][0]) + '-' + self.translate_to_am_pm(self.week[day][1]) + ("\n\tClosed from: " + self.translate_to_am_pm(self.week[day][2][0]) + '-' + (self.translate_to_am_pm(self.week[day][2][1])) if self.lunch_break == True else '') if type(self.week[day]) is list else self.week[day])
             output = output + '\n'
         return output
     
@@ -77,7 +89,7 @@ def test():
     print(testit)
         #test adding lunch
     print('\n')
-    testit.change_lunch_break(13,14)
+    testit.change_lunch_break('13',14)
     print(testit)
         #test changing lunch break
     print('\n')
@@ -88,6 +100,11 @@ def test():
     print(testit.translate_from_am_pm("1am"))
     print(testit.translate_from_am_pm("4pm"))
         #test translation function
+    
+    print('\n')
+    testit.add_time("Monday", 0,0)
+    testit.detect_closed()
+    print(testit)
 
 
 if __name__ == "__main__":
