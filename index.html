@@ -1,46 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HouseCall</title>
-    <link rel="stylesheet" href="styles.css">
-   <!-- 
-    <script src="script.js" defer></script>
-   --> 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HouseCall</title>
+
+  <!-- SEO Meta -->
+  <meta http-equiv="Content-Language" content="en">
+  <meta name="description" content="HouseCall connects patients with local healthcare providers for fast, reliable home consultations.">
+  <meta name="author" content="HouseCall Team">
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/481272558b.js" crossorigin="anonymous"></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Script -->
+  <script type="module" src="script.js" defer></script>
 </head>
-<body>
-    <div class="main_cont">
-        <div class="main_text">
-            <h1>House Call</h1>
-        </div>
-        <div class="main_img">
-            <img src="med.webp" alt="House Call Image">
-        </div>
-    </div>
 
-    <div class="body_cont">
-        <div class="body_text">
-            <p class="body_intro">Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
+<body style="background: paleturquoise">
+  <!-- Header -->
+  <header>
+    <nav class="navbar">
+      <div class="navbar_cont">
+        <div class="nav_left">
+          <a href="index.html" id="Logo">
+            <img src="med.webp" alt="HouseCall Logo">
+          </a>
+          <div id="header_title">
+            <span>HouseCall</span>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="main">
+    <section id="main_intro_container">
+      <div id="main_intro_text">
+        <h1>House Call</h1>
+        <p><i>
+          Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+          Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet
+          quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.
+        </i></p>
+      </div>
+      <div id="main_intro_image">
+        <img src="med.webp" alt="House Call Image" width="90%" height="auto">
+      </div>
+    </section>
+
+    <section id="main_content_container">
+      <div class="body_text">
+        <p class="body_intro">Write down your Zip Code and Symptoms below</p>
+      </div>
+
+      <div class="body_input">
+        <input type="text" placeholder="Zip Code" id="zip_code">
+        <input type="text" placeholder="Enter text here" id="text_input">
+
+        <div class="body_buttons">
+          <div class="body_button_one">
+            <p class="body_one">Direct Care Providers</p>
+            <input type="checkbox" id="check_one">
+          </div>
+          <div class="body_button_two">
+            <p class="body_two">Community Providers</p>
+            <input type="checkbox" id="check_two">
+          </div>
         </div>
 
-        <div class="body_input">
-            <input type="text" placeholder="Zip Code" id="zip_code">
-            <input type="text" placeholder="Enter text here" id="text_input">
-
-            <div class="body_buttons">
-                <div class="body_button_one">
-                    <h4 class="body_one">Direct Care Providers</h4>
-                    <input type="checkbox" id="check_one">
-                </div>
-                <div class="body_button_two">
-                    <h4 class="body_two">Community Providers</h4>
-                    <input type="checkbox" id="check_two">
-                </div>
-            </div>
-
-            <button class="body_submit">Submit</button>
-        </div>
-    </div>
+        <button class="body_submit">Submit</button>
+      </div>
+    </section>
+    <div class="main_provider_cont"></div>
+  </main>
 </body>
 </html>

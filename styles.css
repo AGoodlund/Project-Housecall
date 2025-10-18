@@ -1,92 +1,188 @@
-body {
-    font-family: Arial, sans-serif;
+:root {
+    --primary-color: black;
+    --secondary-color: blue;
+    --background-color: paleturquoise;
+    --accent-color: paleturquoise;
+  }
+  
+  html, body {
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
-    font-weight: normal;
-}
+  }
 
-.main_cont {
+  p {
+    line-height: 1.6;
+    margin: 0;
+  }
+  
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  
+  header {
+    background-color: white;
+    padding: 15px 0;
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .navbar {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
-}
-
-.body_intro {
-    text-align: center;
-    justify-self: center;
-    margin-bottom: 20px;
-    max-width: 50%;
-}
-
-.main_text h1 {
-    font-size: 5rem;
-    margin-right: 100px;
-}
-.main_img img {
-    margin-top: 100px;
-    width: 400px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  .navbar_cont {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .nav_left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  #Logo img {
+    width: 60px;
     height: auto;
-    border-radius: 10px;
-}
-
-.body_cont {
-    margin-top: 30px;;
-}
-
-.body_text h4 {
-    font-size: 1.5rem;
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.body_input {
+  }
+  
+  #header_title span {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+  }
+  
+  .main {
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center; 
+  }
+  
+  #main_intro_container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     justify-content: center;
-    text-align: center;
-    margin-top: 20px;
-}
-
-.body_input input[type="text"] {
-    width: 60%;
-    min-height: 50px;
-    padding: 10px;
-    font-size: 1rem;
-    border: 2px solid white;
-    border-radius: 8px;
-    margin-bottom: 25px;
-}
-.body_buttons {
+    gap: 40px;
+    max-width: 1000px;
+    width: 90%;
+    padding: 50px 0;
+  }
+  
+  #main_intro_text {
+    flex: 1;
+    text-align: left;
+  }
+  
+  #main_intro_text h1 {
+    font-size: 6rem;
+    margin-bottom: 20px;
+  }
+  
+  #main_intro_text p {
+    font-size: 1.1rem;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  
+  #main_intro_image {
+    flex: 1;
     display: flex;
     justify-content: center;
-    gap: 50px;
-}
+  }
+  
+  #main_intro_image img {
+    width: 110%;
+    max-width: 600px;
+    height: auto;
+    border-radius: 10px;
+  }
+  
+  #main_content_container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    width: 100%;
+    padding: 60px 0;
+  }
+  
+  .body_intro {
+    text-align: left;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #000;
+    max-width: 800px;
+  }
+  
+  .body_input {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    gap: 20px;
+    width: 100%;
+    max-width: 600px;
+  }
+  
+  .body_input input[type="text"] {
+    width: 100%;
+    height: 100px;
+    padding: 12px 15px;
+    font-size: 1rem;
+    border: 2px solid gray;
+    border-radius: 8px;
+    text-align: center;
+  }
 
-.body_button_one, .body_button_two {
+  .body_input #zip_code {
+    text-align: left;
+    width: 20%;
+    height: 10%;
+  }
+  
+  .body_buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .body_button_one,
+  .body_button_two {
     display: flex;
     align-items: center;
     gap: 10px;
-    border: 2px solid black;
-    border-radius: 20px;
-    background-color: lightblue; 
-    padding: 10px 20px;
-}
-
-.body_one, .body_two {
-    font-size: 1.2rem;
-    margin: 0;
-}
-
-.body_submit {
-    border: 2px solid transparent;
-    margin-top: 20px;
-    background-color: lightblue;
-    border: 2px solid black;
-    border-radius: 20px;
-    padding: 10px 20px;
+    padding: 12px 25px;
+    border: 2px solid #000;
+    border-radius: 40px;
+    background-color: var(--accent-color);
+    font-size: 1.1rem;
+  }
+  
+  .body_submit {
+    background-color: var(--accent-color);
+    border: 2px solid #000;
+    border-radius: 25px;
+    padding: 12px 25px;
     font-size: 1.2rem;
     cursor: pointer;
-}
+    width: 150px;
+    align-self: center;
+  }
+
+  #check_one, #check_two {
+    width: 20px;
+    height: 20px;
+    border-radius: 25px;
+    display: block;
+    cursor: pointer;
+  }
