@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         const providers = await response.json();
   
-        providers.forEach((pro) => {
+        providers.slice(0,10).forEach((pro) => {
           const li = document.createElement("li");
           li.classList.add("provider_item");
           if (pro.name && pro.name !== "unknown" && pro.specialty && pro.specialty !== "unknown" && pro.phone && pro.phone !== "unknown")
@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
           li.innerHTML = `${pro.name}`;
           
           li.addEventListener("click", () => {
-            let contactHTML = `<div class="info_section contact_info"><h2>${pro.name}</h2>`;
+            let contactHTML = `<div class="info_section contact_info"><h2 class="pro_namee">${pro.name}</h2>`;
             if (pro.address && pro.address !== "unknown")
               contactHTML += `<p><strong>Address:</strong> ${pro.address}</p>`;
             if (pro.specialty && pro.specialty !== "unknown")
@@ -69,12 +69,12 @@ document.addEventListener("DOMContentLoaded", () => {
               detailsHTML += `<p><strong>Website:</strong> <a class="web_link" href="https://${pro.website}" target="_blank">${pro.website}</a></p>`;
             if (pro.accepting_new_clients !== undefined && pro.accepting_new_clients !== "unknown")
               detailsHTML += `<p><strong>Accepting New Clients:</strong> ${pro.accepting_new_clients ? "Yes" : "No"}</p>`;
-            if (pro.ages_covered && pro.ages_covered !== "unknown") {
+            if (pro.all_ages) {
+              detailsHTML += `<p><strong>All Ages:</strong> Yes</p>`;
+            } else if (pro.ages_covered && pro.ages_covered !== "unknown") {
               const ages_covered = pro.ages_covered.replaceAll("[", "").replaceAll("]", "").replaceAll(",", "-").trim();
               detailsHTML += `<p><strong>Ages Covered:</strong> ${ages_covered}</p>`;
             }
-            if (pro.all_ages)
-              detailsHTML += `<p><strong>All Ages:</strong> Yes</p>`;
             if (pro.schedule && pro.schedule !== "unknown" && pro.schedule.trim() !== "") {
               let scheduleText = pro.schedule.replaceAll("\\n", "\n").replaceAll("<br>", "\n");
               detailsHTML += `<p><strong>Schedule:</strong></p><pre class="schedule">${scheduleText.trim()}</pre>`;
@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
               const validTags = pro.tags.filter(t => t && t !== "unknown").slice(0, 6);
               if (validTags.length) {
                 const tagHTML = validTags.map(t => `<span class="tag">${t}</span>`).join(" ");
-                detailsHTML += `<p><strong>Tags:</strong><br>${tagHTML}</p>`;
+                detailsHTML += `<p><strong>Associated tags:</strong><br>${tagHTML}</p>`;
               }
             }
             detailsHTML += `</div>`;
