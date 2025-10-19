@@ -27,18 +27,17 @@ class ProviderAgent:
         header_map: Dict[str, str] = {
             "name": "name",
             "provider_name": "name",
-
             "specialty": "specialty",
             "specialism": "specialty",
-
             "address": "address",
             "street": "address",
             "location": "address",
-
+            "zip": "zip_code",
+            "zipcode": "zip_code",
+            "postal_code": "zip_code",
             "phone_number": "phone_number",
             "phone": "phone_number",
             "tel": "phone_number",
-
             "accepting_new_clients": "accepting_new_clients",
             "accepting": "accepting_new_clients",
             "new_patients": "accepting_new_clients",
@@ -87,13 +86,80 @@ class ProviderAgent:
                     set_attr(attr, value)
 
                 # Ensure all expected attributes exist
-                for attr in ("name", "specialty", "address", "phone_number", "accepting_new_clients"):
+                for attr in ("name", "specialty", "address","zip-code" "phone_number", "accepting_new_clients"):
                     if not hasattr(p, attr):
                         set_attr(attr, "" if attr != "accepting_new_clients" else False)
 
                 providers.append(p)
 
         return providers
+
+
+def pretty_print_provider(p: Provider, index: int | None = None) -> None:
+    prefix = f"[{index}] " if index is not None else ""
+    print(
+        f"{prefix}name={getattr(p,'name','')} | "
+        f"specialty={getattr(p,'specialty','')} | "
+        f"address={getattr(p,'address','')} | "
+        f"phone={getattr(p,'phone_number','')} | "
+        f"accepting={getattr(p,'accepting_new_clients',False)}"
+    )
+
+
+def normalize_search_field(raw: str) -> str | None:
+    """Map user-entered field name to an attribute on Provider."""
+    key = (raw or "").strip().lower()
+    if key in {"name", "provider", "provider_name"}:
+        return "name"
+    if key in {"specialty", "specialism"}:
+        return "specialty"
+    if key in {"address", "street", "location"}:
+        return "address"
+    if key in {"zip", "zipcode", "postal", "postal_code"}:
+        return "zip_code"
+    if key in {"phone", "phone_number", "tel"}:
+        return "phone_number"
+    if key in {"accepting", "accepting_new_clients", "new_patients"}:
+        return "accepting_new_clients"
+    if key in {"", "any", "all"}:
+        return ""  # search across common text fields
+    return None
+
+
+def parse_bool(text: str) -> bool | None:
+    t = (text or "").strip().lower()
+    if t in {"true", "yes", "y", "1"}:
+        return True
+    if t in {"false", "no", "n", "0"}:
+        return False
+    return None
+
+
+def provider_matches(p: Provider, field: str, query: str) -> bool:
+    """Return True if provider p matches query for given field ('' means multi-field)."""
+    if field == "accepting_new_clients":
+        desired = parse_bool(query)
+        if desired is None:
+            return False
+        return bool(getattr(p, "accepting_new_clients", False)) == desired
+
+    # Text search: case-insensitive "contains"
+    haystacks = []
+    if field:
+        haystacks = [str(getattr(p, field, "") or "")]
+    else:
+        # multi-field search across common text attributes
+        haystacks = [
+            str(getattr(p, "name", "") or ""),
+            str(getattr(p, "specialty", "") or ""),
+            str(getattr(p, "address", "") or ""),
+            str(getattr(p, "zip_code", "") or ""),
+            str(getattr(p, "phone_number", "") or ""),
+        ]
+    needle = (query or "").strip().lower()
+    if not needle:
+        return False
+    return any(needle in h.lower() for h in haystacks)
 
 
 if __name__ == "__main__":
@@ -115,15 +181,37 @@ if __name__ == "__main__":
         )
 
     providers = agent.load_providers_from_csv(csv_path)
-    print(f"Loaded {len(providers)} providers from {csv_path}")
+    print(f"Loaded {len(providers)} providers from {csv_path}\n")
 
-    # Quick preview
-    for i, p in enumerate(providers[:5], start=1):
-        print(
-            f"[{i}] name={getattr(p,'name',None)} | "
-            f"specialty={getattr(p,'specialty',None)} | "
-            f"phone={getattr(p,'phone_number',None)} | "
-            f"accepting={getattr(p,'accepting_new_clients',None)}"
-        )
+    # --- Interactive filter ---
+    print("Search fields: name, specialty, zip-code, address, phone, accepting")
+    field_input = input("Choose a field (or press Enter to search all text fields): ")
+    field = normalize_search_field(field_input)
+    if field is None:
+        raise SystemExit(f"Unrecognized field: '{field_input}'. Valid: zip-code, name, specialty, address, phone, accepting.")
 
-  
+    query = input(
+        "Enter your search query "
+        + ("(true/false/yes/no for 'accepting'): " if field == "accepting_new_clients" else ": ")
+    )
+
+    matches = [p for p in providers if provider_matches(p, field, query)]
+
+    if not matches:
+        print("\nNo matching providers found.")
+    elif len(matches) == 1:
+        print("\nSelected provider:")
+        pretty_print_provider(matches[0])
+    else:
+        print(f"\nFound {len(matches)} matching providers:")
+        for i, p in enumerate(matches, 1):
+            pretty_print_provider(p, i)
+        # Optional: allow user to pick one for exact "instance"
+        pick = input("\nEnter the number of the provider to view details (or press Enter to skip): ").strip()
+        if pick.isdigit():
+            idx = int(pick)
+            if 1 <= idx <= len(matches):
+                print("\nSelected provider:")
+                pretty_print_provider(matches[idx - 1])
+            else:
+                print("Index out of range; showing all matches above.")
