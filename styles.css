@@ -293,6 +293,8 @@
 
 .prov_cont {
   width: 100%;
+  justify-content: center;
+  display: flex;
   color: linear-gradient(0deg, var(--background-color) 90%) ,red  no-repeat;
 }
 
@@ -305,6 +307,8 @@
 }
 .provider_cont {
   display: flex;
+  justify-content: center;
+  align-items: flex-start;
   gap: 20px;
   max-width: 1400px;
   width: 90%;
@@ -319,6 +323,7 @@
   background: #f5f5f5;
   max-height: 300px;
   overflow-y: auto;
+  max-width: 300px;
 }
 .provider_item {
   padding: 8px 10px;
@@ -333,13 +338,65 @@
 }
 
 .provider_info {
-  flex: 2;
-  border: 2px solid #000;
+  display: flex;
+  flex-direction: row;
+  gap: 25px;
+  border: 2px solid black;
   border-radius: 10px;
-  padding: 15px;
-  background: #fff;
-}
-.hint {
+  background: white;
+  padding: 20px;
+  text-align: left;
+  min-width: 400px;
+  min-height: 200px;
+ }
+ 
+ .info_section {
+  flex: 1;
+ }
+ 
+ .hint {
   color: gray;
   text-align: center;
-}
+ }
+ 
+ .contact_info {
+  border-right: 1px solid white;
+  padding-right: 20px;
+ }
+ 
+ .details_info {
+  padding-left: 20px;
+ }
+ 
+ .web_link {
+  color: blue;
+  text-decoration: none;
+  font-weight: 500;
+ }
+ 
+ .web_link:hover {
+  text-decoration: underline;
+ }
+ .schedule {
+  background-color: #f0eff5;
+  border: 1px solid #dcd3d3;
+  border-radius: 8px;
+  padding: 10px 15px;
+  font-size: 10px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  margin-top: 5px;
+ }
+ 
+ .tag {
+  display: inline-block;
+  background-color: lightgray;
+  border: 1px solid lightblue;
+  color: rgb(62, 62, 241);
+  font-weight: 500;
+  font-size: 10px;
+  border-radius: 15px;
+  padding: 5px 12px;
+  margin: 3px 4px;
+  white-space: nowrap;
+ }
