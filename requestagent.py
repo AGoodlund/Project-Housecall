@@ -3,6 +3,38 @@ import csv
 from typing import List, Dict
 from provider import Provider
 
+def read_queries_from_txt(txt_path: str) -> tuple[str, str]:
+    """
+    Read the first two lines from a text file:
+      line 1 -> zip (string, supports partial match)
+      line 2 -> free-text (searched across name/specialty/address/zip/phone)
+    """
+    zip_query = ""
+    free_query = ""
+    with open(txt_path, "r", encoding="utf-8-sig") as f:
+        lines = [ln.strip() for ln in f.readlines()]
+    if lines:
+        zip_query = lines[0]
+    if len(lines) > 1:
+        free_query = lines[1]
+    return zip_query, free_query
+
+
+def pick_first_distinct(
+    pool: list, 
+    already_picked: set
+):
+    """Return the first item in pool not in already_picked; fallback to pool[0] if needed."""
+    if not pool:
+        return None
+    for p in pool:
+        if id(p) not in already_picked:
+            return p
+    return pool[0]  # all were picked; allow repeat
+
+
+
+
 class ProviderAgent:
     """
     Load Provider objects from a CSV file.
@@ -94,7 +126,7 @@ class ProviderAgent:
                     set_attr(attr, value)
 
                 # Ensure all expected attributes exist
-                for attr in ("name", "specialty", "address","zip-code" "phone_number", "accepting_new_clients"):
+                for attr in ("name", "specialty", "address","zip_code" "phone_number", "accepting_new_clients"):
                     if not hasattr(p, attr):
                         set_attr(attr, "" if attr != "accepting_new_clients" else False)
 
@@ -103,15 +135,30 @@ class ProviderAgent:
         return providers
 
 
-def pretty_print_provider(p: Provider, index: int | None = None) -> None:
+def pretty_print_provider(p: Provider, index: int | None = None, fields_to_show: list[str] | None = None) -> None:
     prefix = f"[{index}] " if index is not None else ""
-    print(
-        f"{prefix}name={getattr(p,'name','')} | "
-        f"specialty={getattr(p,'specialty','')} | "
-        f"address={getattr(p,'address','')} | "
-        f"phone={getattr(p,'phone_number','')} | "
-        f"accepting={getattr(p,'accepting_new_clients',False)}"
-    )
+    if not fields_to_show:
+        fields_to_show = ["name", "specialty", "address", "zip_code", "phone_number", "accepting_new_clients"]
+
+    label_map = {
+        "name": "name",
+        "specialty": "specialty",
+        "address": "address",
+        "zip_code": "zip",
+        "phone_number": "phone",
+        "accepting_new_clients": "accepting",
+        "tags": "tags",
+    }
+
+    parts = []
+    for f in fields_to_show:
+        lab = label_map.get(f, f)
+        val = getattr(p, f, "")
+        if f == "tags" and isinstance(val, list):
+            val = ", ".join(val)
+        parts.append(f"{lab}={val}")
+    print(prefix + " | ".join(parts))
+
 
 
 def normalize_search_field(raw: str) -> str | None:
@@ -169,57 +216,97 @@ def provider_matches(p: Provider, field: str, query: str) -> bool:
         return False
     return any(needle in h.lower() for h in haystacks)
 
-
 if __name__ == "__main__":
     agent = ProviderAgent()
 
-    # Look for a CSV in common locations
     import os
-    candidate_paths = [
+    # CSV candidates
+    candidate_csv_paths = [
         "output.csv",
-        "outout.csv",             # earlier misspelling fallback
+        "outout.csv",
         "/mnt/data/output.csv",
         "/mnt/data/outout.csv",
+        "sac_mhp_output.csv",
+        "/mnt/data/sac_mhp_output.csv",
     ]
-    csv_path = next((p for p in candidate_paths if os.path.exists(p)), None)
+    csv_path = next((p for p in candidate_csv_paths if os.path.exists(p)), None)
     if not csv_path:
         raise SystemExit(
-            "CSV not found. Place 'output.csv' (or 'outout.csv') next to this file "
-            "or in /mnt/data/, then run again."
+            "CSV not found. Place 'output.csv' (or 'outout.csv' / 'sac_mhp_output.csv') "
+            "next to this file or in /mnt/data/, then run again."
         )
 
+    # Query file (line 1 = ZIP, line 2 = free-text)
+    candidate_txt_paths = ["query.txt", "/mnt/data/query.txt"]
+    txt_path = next((p for p in candidate_txt_paths if os.path.exists(p)), None)
+    if not txt_path:
+        raise SystemExit(
+            "Query file not found. Create 'query.txt' with:\n"
+            "  line 1 = zip (e.g., 85001)\n"
+            "  line 2 = free text (e.g., family medicine)\n"
+        )
+
+    zip_query, free_query = read_queries_from_txt(txt_path)
+
     providers = agent.load_providers_from_csv(csv_path)
-    print(f"Loaded {len(providers)} providers from {csv_path}\n")
 
-    # --- Interactive filter ---
-    print("Search fields: name, specialty, zip-code, address, phone, accepting")
-    field_input = input("Choose a field (or press Enter to search all text fields): ")
-    field = normalize_search_field(field_input)
-    if field is None:
-        raise SystemExit(f"Unrecognized field: '{field_input}'. Valid: zip-code, name, specialty, address, phone, accepting.")
+    # Prepare match pools
+    zip_matches = []
+    text_matches = []
+    both_matches = []
 
-    query = input(
-        "Enter your search query "
-        + ("(true/false/yes/no for 'accepting'): " if field == "accepting_new_clients" else ": ")
-    )
+    if zip_query.strip():
+        zip_matches = [p for p in providers if provider_matches(p, "zip_code", zip_query)]
 
-    matches = [p for p in providers if provider_matches(p, field, query)]
+    if free_query.strip():
+        # empty field => search across all common text fields
+        text_matches = [p for p in providers if provider_matches(p, "", free_query)]
 
-    if not matches:
-        print("\nNo matching providers found.")
-    elif len(matches) == 1:
-        print("\nSelected provider:")
-        pretty_print_provider(matches[0])
+    if zip_query.strip() and free_query.strip():
+        both_matches = [
+            p for p in providers
+            if provider_matches(p, "zip_code", zip_query) and provider_matches(p, "", free_query)
+        ]
+
+    # Pick one for each bucket (aim for distinct providers where possible)
+    picked_ids = set()
+    one_zip = pick_first_distinct(zip_matches, picked_ids)
+    if one_zip:
+        picked_ids.add(id(one_zip))
+
+    one_text = pick_first_distinct(text_matches, picked_ids)
+    if one_text:
+        picked_ids.add(id(one_text))
+
+    one_both = pick_first_distinct(both_matches, picked_ids)
+    # (don't add to picked_ids; nothing else to pick after this)
+
+    # Decide which columns to show:
+    #   Always show name and the field(s) you asked about (zip and whatever your free text is targeting).
+    fields_to_show = ["name"]
+    if zip_query.strip():
+        fields_to_show.append("zip_code")
+    # Show core fields to make results useful
+    for f in ["specialty", "address", "phone_number", "accepting_new_clients"]:
+        if f not in fields_to_show:
+            fields_to_show.append(f)
+
+    print(f"Loaded {len(providers)} providers from {csv_path}")
+    print(f"Query file: {txt_path}")
+
+    # --- Output: one provider for ZIP ---
+    if one_zip:
+        pretty_print_provider(one_zip, fields_to_show=fields_to_show)
     else:
-        print(f"\nFound {len(matches)} matching providers:")
-        for i, p in enumerate(matches, 1):
-            pretty_print_provider(p, i)
-        # Optional: allow user to pick one for exact "instance"
-        pick = input("\nEnter the number of the provider to view details (or press Enter to skip): ").strip()
-        if pick.isdigit():
-            idx = int(pick)
-            if 1 <= idx <= len(matches):
-                print("\nSelected provider:")
-                pretty_print_provider(matches[idx - 1])
-            else:
-                print("Index out of range; showing all matches above.")
+        print("No provider matched the ZIP query.")
+
+    # --- Output: one provider for TEXT ---
+    if one_text:
+        pretty_print_provider(one_text, fields_to_show=fields_to_show)
+    else:
+        print("No provider matched the TEXT query.")
+    # --- Output: one provider for BOTH ---
+    if one_both:
+        pretty_print_provider(one_both, fields_to_show=fields_to_show)
+    else:
+        print("No provider matched BOTH ZIP and TEXT.")
