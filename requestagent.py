@@ -46,10 +46,18 @@ class ProviderAgent:
         providers: List[Provider] = []
 
         with open(csv_path, newline="", encoding="utf-8") as f:
-            reader = csv.DictReader(f)
-            # Normalize original fieldnames once
-            normalized_fields = {fn: (fn or "").lower().strip() for fn in (reader.fieldnames or [])}
+            reader = csv.DictReader(f, restkey="_extra", restval="")
 
+            # Normalize header names defensively
+            raw_fields = reader.fieldnames or []
+            normalized_fields: Dict[object, str] = {}
+            for fn in raw_fields:
+                if not isinstance(fn, str):
+                    # skip non-string header cells
+                    continue
+                key = fn.lstrip("\ufeff").strip()
+                normalized_fields[fn] = key.lower()
+                
             for row in reader:
                 p = Provider()
 
@@ -60,7 +68,12 @@ class ProviderAgent:
 
                 # Map recognized columns onto Provider
                 for original_key, value in row.items():
-                    key_lc = normalized_fields.get(original_key, original_key).lower()
+                     # Skip invalid keys and the aggregated extras
+                    if original_key in (None, "_extra") or not isinstance(original_key, str):
+                        continue
+
+                    mapped = normalized_fields.get(original_key, original_key)
+                    key_lc = mapped.lower() if isinstance(mapped, str) else ""
                     attr = header_map.get(key_lc)
                     if not attr:
                         continue
@@ -70,16 +83,11 @@ class ProviderAgent:
 
                     # Normalize accepting_new_clients to bool
                     if attr == "accepting_new_clients":
-                        if isinstance(value, str):
-                            v = value.lower()
-                            if v in {"true", "yes", "y", "1"}:
-                                value = True
-                            elif v in {"false", "no", "n", "0"}:
-                                value = False
-                            else:
-                                value = False
-                        elif isinstance(value, (int, float)):
-                            value = bool(value)
+                        v = (value or "").strip().lower() if isinstance(value, str) else ""
+                        if v in {"true", "yes", "y", "1"}:
+                            value = True
+                        elif v in {"false", "no", "n", "0"}:
+                            value = False
                         else:
                             value = False
 

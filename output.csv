@@ -1,0 +1,11 @@
+name,specialty,address,zip,phone_number,accepting_new_clients
+Dr. Sarah Johnson,Pediatrics,123 Maple Street,90210,555-123-4567,Yes
+Dr. James Smith,Cardiology,45 Oak Avenue,10001,555-987-6543,No
+Dr. Emily Davis,Dermatology,678 Pine Road,30303,555-234-7890,Yes
+Dr. Robert Brown,Neurology,12 Elm Boulevard,60606,555-456-7891,No
+Dr. Linda Martinez,Family Medicine,89 Cedar Lane,73301,555-678-9012,Yes
+Dr. Michael Lee,Orthopedics,22 Birch Street,98101,555-789-0123,Yes
+Dr. Patricia Wilson,Dentistry,150 Willow Drive,19103,555-890-1234,No
+Dr. William Harris,Psychiatry,75 Aspen Court,85001,555-901-2345,Yes
+Dr. Elizabeth Clark,Ophthalmology,200 Spruce Road,48201,555-012-3456,Yes
+Dr. David Lewis,Internal Medicine,9 Poplar Avenue,02108,555-345-6789,No
