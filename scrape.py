@@ -50,7 +50,7 @@ def save_csv(rows: List[str], path: str) -> None:
             writer.writerow([item])
 
 def main():
-    cfg = ScrapeConfig(url="https://mapper.dpcfrontier.com/")  # <- replace with your target
+    cfg = ScrapeConfig(url="https://www.communityhealthpartners.org/find-a-provider?page=12")  # <- replace with your target
     html = fetch_html(cfg)
     data = parse_paragraphs(html)
     save_csv(data, cfg.output_csv)
