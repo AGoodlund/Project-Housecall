@@ -1,0 +1,35 @@
+[
+    {
+        "name": "Dr. Johnson",
+        "specialty": "Rheumatology",
+        "tags": ["rheumatology", "pain management"],
+        "phone": "555-0200",
+        "address": "456 Oak Ave",
+        "match_count": 2,
+        "matching_tags": ["pain management", "rheumatology"]
+    },
+    {
+        "name": "Dr. Smith",
+        "specialty": "Orthopedic Surgery",
+        "tags": ["orthopedics", "sports medicine"],
+        "phone": "555-0100",
+        "address": "123 Main St",
+        "match_count": 1,
+        "matching_tags": ["orthopedics"]
+    },
+    {
+        "name": "healthy health people",
+        "address": "here there and everywhere",
+        "specialty": "bones",
+        "phone":  "111-222-3344",
+        "email": "welldrinkyourbones@doctor.doctor",
+        "website": "notavampire.com",
+        "accepting_new_clients" : false,
+        "ages_covered" : "[5, 65]",
+        "all_ages": true,
+        "schedule": "",
+        "match_count": 1,
+        "matching_tags": ["orthopedics"],
+        "tags": ["orthopedics", "sports medicine"]
+    }
+]
